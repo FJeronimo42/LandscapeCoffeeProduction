@@ -6,6 +6,13 @@ ibge_data <- read.csv('Data/ibgecensoagro_rendimentomedio_data.csv',
                       sep = ';') %>% 
   glimpse()
 
+codi_muni <- read.csv('Data/codigo_municipios.csv',
+                      sep = ';') %>% 
+  rename('Code' = codigo_municipio,
+         'Municipality' = nome_municipio) %>% 
+  mutate(Municipality = tolower(Municipality)) %>% 
+  glimpse()
+
 prod_data <- ibge_data %>%
   rename('Unity' = unidade,
          'Coffee' = cafe_total,
@@ -30,21 +37,24 @@ prod_data <- ibge_data %>%
                                         'Tocantins') ~ 'State')) %>% 
   mutate(Level = replace_na(Level, 'Municipality')) %>% 
   filter(Level == 'Municipality' & Year == 2022) %>% 
-  mutate(State = str_sub(Unity, start = -2),
-         Municipality = str_sub(Unity, end = -4),
-         Year = as.character(Year)) %>% 
-  filter(!is.na(Coffee) 
-         | !is.na(Arabica) 
-         | !is.na(Robusta) 
-         | !is.na(Orange) 
-         | !is.na(Soy)) %>% 
-  select(Municipality, State, Coffee, Arabica, Robusta, Orange, Soy) %>% 
+  mutate(Municipality = Unity) %>% 
+  mutate(Municipality = tolower(Municipality)) %>% 
   mutate(Coffee = Coffee / 1000,
          Arabica = Arabica / 1000,
          Robusta = Robusta / 1000,
          Orange = Orange / 1000,
          Soy = Soy / 1000) %>% 
-  arrange(Municipality) %>% 
+  left_join(codi_muni, by = 'Municipality') %>% 
+  mutate(State = str_sub(Unity, start = -2),
+         Municipality = str_sub(Unity, end = -4),
+         Year = as.character(Year)) %>% 
+  select(Municipality, Code, State, Coffee, Arabica, Robusta, Orange, Soy) %>% 
+  arrange(Municipality) %>%
+  filter(!is.na(Coffee) 
+         | !is.na(Arabica) 
+         | !is.na(Robusta) 
+         | !is.na(Orange) 
+         | !is.na(Soy)) %>% 
   glimpse()
 
 save.image('environment_LandscapeProductivity.RData')
