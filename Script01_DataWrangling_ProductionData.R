@@ -57,4 +57,11 @@ prod_data <- ibge_data %>%
          | !is.na(Soy)) %>% 
   glimpse()
 
+arab_data <- prod_data %>% 
+  select(Municipality, Code, State, Arabica) %>% 
+  filter(!is.na(Arabica),
+         Municipality != 'Envira') %>% 
+  mutate(CD_MUN = Code) %>% 
+  glimpse()
+  
 save.image('environment_LandscapeProductivity.RData')
