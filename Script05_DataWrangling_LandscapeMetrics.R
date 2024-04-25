@@ -27,8 +27,13 @@ lmet_path <- lmet_land %>%
   filter(metric != 'enn_mn') %>% 
   glimpse()
 
+# Pivot
+lmet_data <- lmet_path %>% 
+  pivot_wider(names_from = 'metric') %>% 
+  glimpse()
+
 # Export ----
-write_csv(lmet_path,
+write_csv(lmet_data,
           file = 'Data/landscapemetrics_data.csv')
 
 # Save ----
