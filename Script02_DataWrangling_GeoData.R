@@ -13,7 +13,7 @@ merged_data <- merge(bras_muni, arab_data, by = "CD_MUN")
 
 class(merged_data)
 
-plot(merged_data, col = merged_data$Arabica)
+#plot(merged_data, col = merged_data$Arabica)
 
 glimpse(merged_data)
 

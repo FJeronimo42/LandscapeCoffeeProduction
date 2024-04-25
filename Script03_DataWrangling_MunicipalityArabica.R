@@ -1,8 +1,8 @@
 # Pasta de origem e destino
 pasta_origem <- "X:/RDirectory/DSBD/LandscapeProductivity/Geo/Municipios_SHP"
+
 pasta_destino <- "X:/RDirectory/DSBD/LandscapeProductivity/Geo/Produtores_Arabica"
 
-# Extrair vetor de nomes de arquivos da coluna CD_MUN
 nomes_arquivos <- muni_prod$CD_MUN
 
 # Iterar sobre cada nome de arquivo
@@ -19,5 +19,23 @@ for (nome_arquivo in nomes_arquivos) {
     cat("Arquivo", nome_arquivo, "não encontrado na pasta de origem.\n")
   }
 }
+
+# Shapefile list
+caminho_pasta <- "X:/RDirectory/DSBD/LandscapeProductivity/Geo/Produtores_Arabica"
+
+# Listar todos os arquivos shapefile na pasta
+arquivos_shape <- list.files(caminho_pasta, pattern = "\\.gpkg$", full.names = TRUE)
+
+# Inicializar uma lista para armazenar os objetos SpatialVector
+lista_municipios <- list()
+
+# Loop sobre cada arquivo shapefile
+for (arquivo in arquivos_shape) {
+  # Ler o arquivo shapefile e adicionar à lista
+  municipio <- terra::vect(arquivo)
+  lista_municipios[[basename(arquivo)]] <- municipio
+}
+
+prod_arab <- lista_municipios
 
 save.image('environment_LandscapeProductivity.RData')
