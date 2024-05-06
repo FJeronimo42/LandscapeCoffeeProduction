@@ -146,7 +146,7 @@ xgbb_pred <- predict(xgbb_bost,
 xgbb_perf <- as.data.frame(metrics(xgbb_pred, 
                                    truth = Arabica,
                                    estimate = Predicted)) %>% 
-  mutate(.algorithm = 'XGBM') %>% 
+  mutate(.algorithm = 'BT') %>% 
   print()
 
 
